@@ -17,7 +17,7 @@ public class ActivityUtil extends AppCompatActivity {
 
     public static void addFragmentToActivity(FragmentManager fragmentManager, Fragment fragment,int fragmentId,String tag){
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        fragmentTransaction.replace(fragmentId,fragment);
+        fragmentTransaction.replace(fragmentId,fragment,tag);
         fragmentTransaction.commit();
     }
 

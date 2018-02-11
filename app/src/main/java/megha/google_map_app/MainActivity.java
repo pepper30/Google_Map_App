@@ -9,8 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
+
 
 public class MainActivity extends AppCompatActivity {
     android.support.v4.app.FragmentManager fragmentManager;
@@ -18,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST = 0;
     boolean camPermission, locPermission;
     GoogleMapFragment mapFragment;
-    GoogleMap gMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         if(mapFragment==null){
             mapFragment= GoogleMapFragment.newInstance();
         }
-
         ActivityUtil.addFragmentToActivity(fragmentManager,mapFragment,R.id.map,FRAGMENT_TAG);
     }
 

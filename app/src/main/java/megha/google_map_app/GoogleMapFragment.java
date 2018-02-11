@@ -26,12 +26,7 @@ import com.google.android.gms.maps.model.Marker;
  */
 
 public class GoogleMapFragment extends SupportMapFragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        GoogleMap.OnInfoWindowClickListener,
-        GoogleMap.OnMapLongClickListener,
-        GoogleMap.OnMapClickListener,
-        GoogleMap.OnMarkerClickListener,
-        OnMapReadyCallback
+        GoogleApiClient.OnConnectionFailedListener
 {
     private MapView mapView;
     private GoogleApiClient googleApiClient;
@@ -46,9 +41,19 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,Bundle savedInstanceState){
+        View view=inflater.inflate(R.layout.map_fragment,viewGroup,false);
 
-        return inflater.inflate(R.layout.map_fragment,viewGroup,false);
+        mapView=view.findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
 
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                map=googleMap;
+            }
+        });
+        return view;
     }
 
     @Override
@@ -61,11 +66,6 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
                 .addApi( LocationServices.API )
                 .build();
 
-        mapView=view.findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);
-        mapView.onResume();
-        mapView.getMapAsync(this);
-        initListeners(map);
     }
 
     @Override
@@ -107,35 +107,6 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
 
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-
-    }
-
-    @Override
-    public void onMapClick(LatLng latLng) {
-
-    }
-
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-
-    }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        return false;
-    }
-
-    private void initListeners( GoogleMap map) {
-
-    }
-
     @SuppressLint("MissingPermission")
     private void initCamera(Location location){
         CameraPosition position=CameraPosition.builder()
@@ -154,9 +125,10 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
     }
 
 
+
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map=googleMap;
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
 
