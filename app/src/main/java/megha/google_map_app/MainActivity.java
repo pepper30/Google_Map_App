@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class MainActivity extends AppCompatActivity {
     android.support.v4.app.FragmentManager fragmentManager;
     String FRAGMENT_TAG = "tag";
     private static final int PERMISSION_REQUEST = 0;
@@ -58,13 +58,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(mapFragment==null){
             mapFragment= GoogleMapFragment.newInstance();
         }
-        mapFragment.getMapAsync(this);
+
         ActivityUtil.addFragmentToActivity(fragmentManager,mapFragment,R.id.map,FRAGMENT_TAG);
     }
 
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        gMap=googleMap;
-    }
+
 }

@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -29,9 +30,10 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
         GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMapClickListener,
-        GoogleMap.OnMarkerClickListener
+        GoogleMap.OnMarkerClickListener,
+        OnMapReadyCallback
 {
-
+    private MapView mapView;
     private GoogleApiClient googleApiClient;
     GoogleMap map;
     private final int[]  MAP_TYPES={GoogleMap.MAP_TYPE_HYBRID,GoogleMap.MAP_TYPE_NORMAL,GoogleMap.MAP_TYPE_SATELLITE,
@@ -46,6 +48,7 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup,Bundle savedInstanceState){
 
         return inflater.inflate(R.layout.map_fragment,viewGroup,false);
+
     }
 
     @Override
@@ -58,6 +61,10 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
                 .addApi( LocationServices.API )
                 .build();
 
+        mapView=view.findViewById(R.id.map);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        mapView.getMapAsync(this);
         initListeners(map);
     }
 
@@ -73,8 +80,21 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
         if(googleApiClient!=null && googleApiClient.isConnected()){
             googleApiClient.disconnect();
         }
-
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onResume(){
+        mapView.onResume();
+        super.onResume();
+    }
+
+
     @SuppressLint("MissingPermission")
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -125,15 +145,19 @@ public class GoogleMapFragment extends SupportMapFragment implements GoogleApiCl
                 .tilt(0.0f)
                 .build();
 
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(position),null);
-        map.setMapType(MAP_TYPES[1]);
-        map.setTrafficEnabled(true);
-        map.setMyLocationEnabled(true);
-        map.getUiSettings().setZoomControlsEnabled(true);
+            map.animateCamera(CameraUpdateFactory.newCameraPosition(position), null);
+            map.setMapType(MAP_TYPES[1]);
+            map.setTrafficEnabled(true);
+            map.setMyLocationEnabled(true);
+            map.getUiSettings().setZoomControlsEnabled(true);
+
     }
 
 
-
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map=googleMap;
+    }
 }
 
 
